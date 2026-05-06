@@ -45,3 +45,6 @@ reports_output/
 
 # Docker
 *.log
+
+# Project docs (local only)
+BlockSecScan_*.md
