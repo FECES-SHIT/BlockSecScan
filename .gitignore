@@ -35,6 +35,7 @@ htmlcov/
 
 # Reports output
 result*.json
+report*.json
 *.sarif
 reports_output/
 
