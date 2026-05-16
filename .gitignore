@@ -50,3 +50,4 @@ reports_output/
 # Project docs (local only)
 BlockSecScan_*.md
 .claude/
+delivery-notes/
