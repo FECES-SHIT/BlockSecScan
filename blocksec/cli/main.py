@@ -38,7 +38,7 @@ def callback():
 def scan_fabric_config(
     path: str = typer.Option(..., "--path", "-p", help="Path to Fabric project directory"),
     output: str | None = typer.Option(None, "--output", "-o", help="Output report file path"),
-    fmt: str = typer.Option("json", "--format", "-f", help="Report format: json, markdown, html"),
+    fmt: str = typer.Option("json", "--format", "-f", help="Report format: json, markdown, html, sarif"),
 ):
     """Scan Hyperledger Fabric configuration files for security issues."""
     console.print(Panel.fit(DISCLAIMER, border_style="yellow"))
@@ -65,6 +65,43 @@ def scan_fabric_config(
 
 
 @app.command()
+def scan_fabric_runtime(
+    local: bool = typer.Option(True, "--local/--no-local", help="Scan local Docker containers"),
+    host: str | None = typer.Option(None, "--host", "-h", help="Remote host to scan"),
+    output: str | None = typer.Option(None, "--output", "-o", help="Output report file path"),
+    fmt: str = typer.Option("json", "--format", "-f", help="Report format: json, markdown, html, sarif"),
+):
+    """Scan running Fabric containers and services for security issues.
+
+    Requires Docker to be running when using --local mode.
+    """
+    console.print(Panel.fit(DISCLAIMER, border_style="yellow"))
+    console.print()
+
+    if not local and not host:
+        console.print("[red]Error:[/red] Specify --local or --host")
+        raise typer.Exit(code=1)
+
+    options: dict = {}
+    if local:
+        options["local"] = True
+    if host:
+        options["host"] = host
+
+    target = ScanTarget(target_type="fabric_runtime", path=host or "local", options=options)
+
+    with console.status("[bold green]Scanning runtime environment..."):
+        result = scan(target)
+
+    _print_result(result)
+
+    if result.findings:
+        actual_output = output or f"runtime-result.{fmt}"
+        generate_report(result, fmt=fmt, output_path=output)
+        console.print(f"\n[dim]Report saved to {actual_output}[/dim]")
+
+
+@app.command()
 def rules_list(category: str | None = typer.Option(None, "--category", "-c", help="Filter by category")):
     """List all available rules."""
     rules = list_rules(category=category)
@@ -88,7 +125,7 @@ def rules_list(category: str | None = typer.Option(None, "--category", "-c", hel
 @app.command()
 def report(
     input_file: str = typer.Option(..., "--input", "-i", help="Scan result JSON file"),
-    fmt: str = typer.Option("markdown", "--format", "-f", help="Output format: json, markdown, html"),
+    fmt: str = typer.Option("markdown", "--format", "-f", help="Output format: json, markdown, html, sarif"),
     output: str | None = typer.Option(None, "--output", "-o", help="Output file path"),
 ):
     """Generate a report from a scan result JSON file."""

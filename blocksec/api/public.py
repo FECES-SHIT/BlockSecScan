@@ -7,6 +7,7 @@ from blocksec.models.rule import Rule
 from blocksec.models.scan import ScanResult, ScanTarget
 from blocksec.rule_engine.parser import RuleParser
 from blocksec.scanners.fabric_config.scanner import FabricConfigScanner
+from blocksec.scanners.fabric_runtime.scanner import FabricRuntimeScanner
 
 _engine: CoreEngine | None = None
 
@@ -16,6 +17,7 @@ def _get_engine() -> CoreEngine:
     if _engine is None:
         registry = ScannerRegistry()
         registry.register(FabricConfigScanner())
+        registry.register(FabricRuntimeScanner())
         _engine = CoreEngine(registry, settings.resolved_rules_dir)
     return _engine
 
@@ -41,6 +43,10 @@ def generate_report(result: ScanResult, fmt: str = "json", output_path: str | No
         from blocksec.reports.exporters.html_exporter import HtmlExporter
 
         report = HtmlExporter.export(result)
+    elif fmt == "sarif":
+        from blocksec.reports.exporters.sarif_exporter import SarifExporter
+
+        report = SarifExporter.export(result)
     else:
         raise ValueError(f"Unsupported report format: {fmt}")
 
