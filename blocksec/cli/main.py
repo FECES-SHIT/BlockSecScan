@@ -16,6 +16,12 @@ app = typer.Typer(
     no_args_is_help=True,
 )
 
+scan_app = typer.Typer(no_args_is_help=True, help="Run security scans")
+rules_app = typer.Typer(no_args_is_help=True, help="Manage rules")
+
+app.add_typer(scan_app, name="scan")
+app.add_typer(rules_app, name="rules")
+
 console = Console()
 
 DISCLAIMER = "[yellow]Only for authorized security testing, educational, and self-owned asset inspection use.[/yellow]"
@@ -34,7 +40,9 @@ def callback():
     """BlockSecScan — Rule-driven blockchain security scanner."""
 
 
-@app.command()
+# ── scan fabric-config ──────────────────────────────────────────
+
+@scan_app.command(name="fabric-config")
 def scan_fabric_config(
     path: str = typer.Option(..., "--path", "-p", help="Path to Fabric project directory"),
     output: str | None = typer.Option(None, "--output", "-o", help="Output report file path"),
@@ -58,23 +66,19 @@ def scan_fabric_config(
 
     actual_output = output or f"result.{fmt}"
     generate_report(result, fmt=fmt, output_path=output)
-    if not output:
-        console.print(f"\n[dim]Report saved to {actual_output}[/dim]")
-    else:
-        console.print(f"\n[dim]Report exported to {actual_output}[/dim]")
+    console.print(f"\n[dim]Report saved to {actual_output}[/dim]")
 
 
-@app.command()
+# ── scan fabric-runtime ────────────────────────────────────────
+
+@scan_app.command(name="fabric-runtime")
 def scan_fabric_runtime(
     local: bool = typer.Option(True, "--local/--no-local", help="Scan local Docker containers"),
     host: str | None = typer.Option(None, "--host", "-h", help="Remote host to scan"),
     output: str | None = typer.Option(None, "--output", "-o", help="Output report file path"),
     fmt: str = typer.Option("json", "--format", "-f", help="Report format: json, markdown, html, sarif"),
 ):
-    """Scan running Fabric containers and services for security issues.
-
-    Requires Docker to be running when using --local mode.
-    """
+    """Scan running Fabric containers and services for security issues."""
     console.print(Panel.fit(DISCLAIMER, border_style="yellow"))
     console.print()
 
@@ -101,7 +105,9 @@ def scan_fabric_runtime(
         console.print(f"\n[dim]Report saved to {actual_output}[/dim]")
 
 
-@app.command()
+# ── rules list ──────────────────────────────────────────────────
+
+@rules_app.command(name="list")
 def rules_list(category: str | None = typer.Option(None, "--category", "-c", help="Filter by category")):
     """List all available rules."""
     rules = list_rules(category=category)
@@ -121,6 +127,8 @@ def rules_list(category: str | None = typer.Option(None, "--category", "-c", hel
 
     console.print(table)
 
+
+# ── report ──────────────────────────────────────────────────────
 
 @app.command()
 def report(
@@ -145,6 +153,8 @@ def report(
     generate_report(result, fmt=fmt, output_path=output)
     console.print(f"[green]Report generated ({fmt})[/green]")
 
+
+# ── shared helpers ──────────────────────────────────────────────
 
 def _print_result(result) -> None:
     s = result.summary
