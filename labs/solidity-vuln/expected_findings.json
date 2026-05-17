@@ -1,0 +1,11 @@
+{
+  "target": "solidity-vuln",
+  "scanner": "slither",
+  "expected_min_findings": 4,
+  "expected_issues": [
+    "reentrancy",
+    "unprotected",
+    "tx-origin",
+    "unchecked-lowlevel"
+  ]
+}

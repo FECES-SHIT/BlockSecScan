@@ -105,6 +105,39 @@ def scan_fabric_runtime(
         console.print(f"\n[dim]Report saved to {actual_output}[/dim]")
 
 
+# ── scan contract ──────────────────────────────────────────────
+
+@scan_app.command(name="contract")
+def scan_contract(
+    path: str = typer.Option(..., "--path", "-p", help="Path to Solidity/Hardhat project"),
+    output: str | None = typer.Option(None, "--output", "-o", help="Output report file path"),
+    fmt: str = typer.Option("json", "--format", "-f", help="Report format: json, markdown, html, sarif"),
+):
+    """Scan Solidity smart contracts using Slither static analysis.
+
+    Requires: pip install -e ".[contract]" and solc available on PATH.
+    """
+    console.print(Panel.fit(DISCLAIMER, border_style="yellow"))
+    console.print()
+
+    target_path = Path(path).resolve()
+    if not target_path.exists():
+        console.print(f"[red]Error:[/red] Path not found: {target_path}")
+        raise typer.Exit(code=1)
+
+    target = ScanTarget(target_type="contract", path=str(target_path))
+
+    console.print("[dim]Running Slither analysis (may take 30-120s)...[/dim]")
+    with console.status(f"[bold green]Scanning {target_path}..."):
+        result = scan(target)
+
+    _print_result(result)
+
+    actual_output = output or f"contract-result.{fmt}"
+    generate_report(result, fmt=fmt, output_path=actual_output)
+    console.print(f"\n[dim]Report saved to {actual_output}[/dim]")
+
+
 # ── rules list ──────────────────────────────────────────────────
 
 @rules_app.command(name="list")

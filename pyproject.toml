@@ -60,6 +60,10 @@ runtime = [
     "cryptography>=41.0.0",
 ]
 
+contract = [
+    "slither-analyzer>=0.10.0",
+]
+
 [project.scripts]
 blocksec = "blocksec.cli.main:app"
 
