@@ -1,4 +1,5 @@
 import os
+from datetime import UTC
 
 from blocksec.rule_engine.engine import RuleEngine
 from blocksec.rule_engine.parser import RuleParser
@@ -123,7 +124,7 @@ def test_tls_client_auth_enabled_passes():
 def test_cert_expired_handler():
     import os
     import tempfile
-    from datetime import datetime, timedelta, timezone
+    from datetime import datetime, timedelta
 
     from cryptography import x509
     from cryptography.hazmat.primitives import hashes, serialization
@@ -132,7 +133,7 @@ def test_cert_expired_handler():
 
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     subject = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "expired.example.com")])
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     cert = (
         x509.CertificateBuilder()
         .subject_name(subject)
