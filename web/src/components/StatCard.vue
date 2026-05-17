@@ -1,28 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps<{ value: number | string; label: string; color?: string }>();
-
 const display = ref(0);
-
-onMounted(() => {
-  if (typeof props.value === "number") {
-    animate(props.value);
-  } else {
-    display.value = null as any;
-  }
-});
 
 watch(
   () => props.value,
   (v) => {
     if (typeof v === "number") animate(v);
-  }
+    else display.value = 0;
+  },
+  { immediate: true }
 );
 
 function animate(target: number) {
   const start = display.value || 0;
   const diff = target - start;
+  if (diff === 0) return;
   const duration = 600;
   const startTime = performance.now();
   function step(now: number) {
