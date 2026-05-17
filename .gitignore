@@ -51,3 +51,10 @@ reports_output/
 BlockSecScan_*.md
 .claude/
 delivery-notes/
+
+# Frontend
+web/node_modules/
+web/dist/
+
+# Database
+data/
