@@ -44,7 +44,7 @@ const expanded = ref(false);
           <p class="f-remediation">{{ finding.remediation }}</p>
         </div>
 
-        <div v-if="finding.references.length" class="f-section">
+        <div v-if="finding.references && finding.references.length > 0" class="f-section">
           <div class="f-section-label">{{ t("finding.references") }}</div>
           <div class="f-refs">
             <a v-for="ref in finding.references" :key="ref" :href="ref" target="_blank" class="f-ref">{{ ref }}</a>

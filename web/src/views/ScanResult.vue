@@ -25,7 +25,7 @@ const filtered = computed(() => {
 });
 
 async function remove() {
-  if (!scan.value || !confirm(t("history.confirmDelete"))) return;
+  if (!scan.value || !confirm(t("result.confirmDelete"))) return;
   await deleteScan(scan.value.id);
   router.push("/history");
 }

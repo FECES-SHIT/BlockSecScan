@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { startScan } from "../api";
 import { t } from "../i18n";
@@ -10,20 +10,27 @@ const targetPath = ref("./labs");
 const scanning = ref(false);
 const error = ref("");
 const progress = ref(0);
+let _timer: ReturnType<typeof setInterval> | null = null;
+
+onUnmounted(() => {
+  if (_timer) { clearInterval(_timer); _timer = null; }
+});
 
 async function run() {
   if (!targetPath.value.trim()) return;
   scanning.value = true;
   error.value = "";
   progress.value = 0;
-  const timer = setInterval(() => { if (progress.value < 90) progress.value += Math.random() * 20; }, 300);
+  _timer = setInterval(() => { if (progress.value < 90) progress.value += Math.random() * 20; }, 300);
   try {
     const { scan_id } = await startScan(targetType.value, targetPath.value.trim());
-    clearInterval(timer);
+    clearInterval(_timer);
+    _timer = null;
     progress.value = 100;
     setTimeout(() => router.push(`/scan/${scan_id}`), 200);
   } catch (e: any) {
-    clearInterval(timer);
+    clearInterval(_timer);
+    _timer = null;
     error.value = e.message || "scan failed";
     scanning.value = false;
   }

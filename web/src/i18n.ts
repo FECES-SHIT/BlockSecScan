@@ -1,4 +1,4 @@
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 type Lang = "zh" | "en";
 
@@ -47,6 +47,7 @@ const messages: Record<Lang, Record<string, string>> = {
     "result.filterLow": "Low",
     "result.empty": "No security issues found.",
     "result.emptyFilter": "No findings matching filter.",
+    "result.confirmDelete": "Delete this scan?",
     "result.noFindings": "No security issues found.",
 
     "history.title": "Scan History",
@@ -62,6 +63,7 @@ const messages: Record<Lang, Record<string, string>> = {
     "history.confirmDelete": "Delete this scan?",
 
     "rules.title": "Rules",
+    "rules.filterAll": "All",
     "rules.empty": "No rules loaded.",
     "rules.id": "Rule ID",
     "rules.name": "Name",
@@ -127,6 +129,7 @@ const messages: Record<Lang, Record<string, string>> = {
     "result.filterLow": "低危",
     "result.empty": "未发现安全问题。",
     "result.emptyFilter": "当前筛选条件下无结果。",
+    "result.confirmDelete": "确认删除此扫描结果？",
     "result.noFindings": "未发现安全问题。",
 
     "history.title": "扫描历史",
@@ -142,6 +145,7 @@ const messages: Record<Lang, Record<string, string>> = {
     "history.confirmDelete": "确认删除此条扫描记录？",
 
     "rules.title": "规则库",
+    "rules.filterAll": "全部",
     "rules.empty": "未加载到规则。",
     "rules.id": "规则ID",
     "rules.name": "名称",

@@ -21,7 +21,6 @@ const lastScan = () => {
   if (!scans.value.length) return "—";
   return scans.value[0].created_at.replace("T", " ").slice(0, 16);
 };
-const highPct = () => (totalFindings() > 0 ? Math.round((totalHigh() / totalFindings()) * 100) : 0);
 </script>
 
 <template>

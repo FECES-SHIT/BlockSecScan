@@ -24,7 +24,7 @@ const filtered = computed(() => {
   <div class="rules-head">
     <h1 class="page-title">{{ t("rules.title") }} <span class="count">{{ rules.length }}</span></h1>
     <div class="cat-bar">
-      <button v-for="c in cats" :key="c" class="cat-btn" :class="{ active: filterCategory === c }" @click="filterCategory = c">{{ c === "all" ? "All" : c }}</button>
+      <button v-for="c in cats" :key="c" class="cat-btn" :class="{ active: filterCategory === c }" @click="filterCategory = c">{{ c === "all" ? t("rules.filterAll") : c }}</button>
     </div>
   </div>
 
