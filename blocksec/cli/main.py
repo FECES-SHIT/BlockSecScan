@@ -250,6 +250,17 @@ def report(
     console.print(f"[green]Report generated ({fmt})[/green]")
 
 
+# ── mcp ────────────────────────────────────────────────────────
+
+@app.command()
+def mcp():
+    """Start BlockSecScan MCP server (for AI assistants like Claude Desktop)."""
+    from blocksec.mcp.server import run
+
+    console.print("[dim]Starting BlockSecScan MCP server (stdio)...[/dim]")
+    run()
+
+
 # ── shared helpers ──────────────────────────────────────────────
 
 def _print_result(result) -> None:

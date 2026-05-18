@@ -54,6 +54,14 @@ async function run() {
         <span class="type-icon">📜</span>
         <span class="type-label">{{ t("scan.typeContract") }}</span>
       </button>
+      <button class="type-option" :class="{ active: targetType === 'rpc' }" @click="targetType = 'rpc'">
+        <span class="type-icon">🔌</span>
+        <span class="type-label">{{ t("scan.typeRpc") }}</span>
+      </button>
+      <button class="type-option" :class="{ active: targetType === 'web3' }" @click="targetType = 'web3'">
+        <span class="type-icon">🌐</span>
+        <span class="type-label">{{ t("scan.typeWeb3") }}</span>
+      </button>
     </div>
 
     <div class="form-group">
@@ -83,7 +91,7 @@ async function run() {
 }
 .type-picker {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 0.75rem;
   margin-bottom: 1.5rem;
 }

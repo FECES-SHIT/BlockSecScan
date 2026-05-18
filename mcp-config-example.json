@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "blocksecscan": {
+      "command": "python",
+      "args": ["-m", "blocksec.cli.main", "mcp"],
+      "cwd": "C:/Users/Feces/Desktop/Codex"
+    }
+  }
+}

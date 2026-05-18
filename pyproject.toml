@@ -64,6 +64,10 @@ contract = [
     "slither-analyzer>=0.10.0",
 ]
 
+mcp = [
+    "mcp>=1.0.0",
+]
+
 [project.scripts]
 blocksec = "blocksec.cli.main:app"
 
