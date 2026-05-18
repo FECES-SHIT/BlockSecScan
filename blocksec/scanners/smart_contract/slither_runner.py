@@ -68,7 +68,7 @@ def _ensure_solc_for_files(project_path: str):
                         ["solc-select", "use", version, "--always-install"],
                         capture_output=True, timeout=60,
                     )
-                return
+                    return
 
 
 def _find_sol_dirs(root: str) -> list[str]:
